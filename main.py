@@ -1,10 +1,7 @@
 import subprocess
 import sys
-
-from PyQt5.QtChart import QPieSeries, QChart, QChartView
-from PyQt5.QtGui import QPixmap, QIcon, QPainter
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QPushButton, QFileDialog, QLabel, \
-    QGridLayout, QDialog
+from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QPushButton, QFileDialog, QLabel
 from PyQt5.QtCore import pyqtSlot, Qt
 import pandas as pd
 from datetime import datetime
@@ -73,17 +70,19 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def show_pie_chart(self):
+        print("Piechart Called")
         subprocess.run(["python", "pie.py"])
 
     @pyqtSlot()
     def show_pie_chart_actual(self):
+        print("Piechart Called")
         subprocess.run(["python", "histogram.py"])
 
     @pyqtSlot()  # Decorator for slot method
     def button_clicked(self):
         button = self.sender()  # Get the sender of the clicked signal (in this case, the button)
         button_name = button.text()
-        if button_name == "PieChart":
+        if button_name == "PieChart FCC_34sysState":
             self.show_pie_chart()
             return
         if button_name == "PieChart FCC_Model_Actual":
@@ -200,22 +199,31 @@ class MainWindow(QMainWindow):
                                 data.append({"Filename": file_name, "Column Values": values})
                     except Exception as e:
                         pass
-        if operation == "max" :
-            data = max(data, key=lambda x: x["Column Value"])
-
-            df = pd.DataFrame([data])
+        # if operation == "max" :
+        #     data = max(data, key=lambda x: x["Column Value"])
+        #
+        #     df = pd.DataFrame([data])
+        # else:
+        #     df = pd.DataFrame(data)
+        if operation == "max":
+            if data:  # Check if data is not empty
+                data = max(data, key=lambda x: x["Column Value"])
+                df = pd.DataFrame([data])
+            else:
+                print("No data available for maximum operation.")
+                return  # or handle the situation accordingly
         else:
             df = pd.DataFrame(data)
-
         # Extract the serial number from the first filename
-        serial_number = df["Filename"].iloc[0].split("_")[0]
+        # serial_number = df["Filename"].iloc[0].split("_")[0]
+        # print(serial_number)
 
         # Generate the current date and time for the Excel file name
         current_datetime = datetime.now().strftime("%Y%m%d_%H%M%S")
         file_name = f"data_{current_datetime}.xlsx"
 
         # Create the directory based on the serial number and button name if it doesn't exist
-        directory = os.path.join(os.getcwd(), serial_number, saving_directory)
+        directory = os.path.join(os.getcwd(), saving_directory)
         if not os.path.exists(directory):
             os.makedirs(directory)
 

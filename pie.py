@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QDialog, QGridLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QFileDialog, QDialog, QGridLayout
 from PyQt5.QtChart import QChart, QChartView, QPieSeries
 
 class FileProcessor(QObject):
@@ -10,6 +10,7 @@ class FileProcessor(QObject):
     def __init__(self, folder_path):
         super().__init__()
         self.folder_path = folder_path
+
 
     def processFiles(self):
         count_5 = 0
@@ -34,31 +35,12 @@ class FileProcessor(QObject):
 
         self.processingFinished.emit(count_5, count_6, count_11)
 
-# class PieChartWindow(QDialog):
-#     def __init__(self, count_5, count_6, count_11):
-#         super().__init__()
-#         self.setWindowTitle('Pie Chart')
-#         self.layout = QGridLayout()
-#
-#         self.chart = QChart()
-#         self.chart.setTitle("FCC_34sysState Counts")
-#         self.chart.legend().setVisible(True)
-#         self.chart.legend().setAlignment(Qt.AlignBottom)
-#
-#         series = QPieSeries()
-#         series.append("FCC_34sysState==5", count_5)
-#         series.append("FCC_34sysState==6", count_6)
-#         series.append("FCC_34sysState==11", count_11)
-#         self.chart.addSeries(series)
-#
-#         chart_view = QChartView(self.chart)
-#         self.layout.addWidget(chart_view, 0, 0)
-#
-#         self.setLayout(self.layout)
+
 class PieChartWindow(QDialog):
     def __init__(self, count_5, count_6, count_11):
         super().__init__()
         self.setWindowTitle('Pie Chart')
+        self.setGeometry(100, 100, 400, 300)
         self.layout = QGridLayout()
 
         self.chart = QChart()

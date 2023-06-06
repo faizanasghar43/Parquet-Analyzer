@@ -39,6 +39,7 @@ class PieChartWindow(QDialog):
     def __init__(self, count_5, count_6, count_11):
         super().__init__()
         self.setWindowTitle('Pie Chart')
+        self.setGeometry(100, 100, 400, 300)
         self.layout = QGridLayout()
 
         self.chart = QChart()
